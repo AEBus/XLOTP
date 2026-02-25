@@ -7,7 +7,7 @@ internal sealed class CodeCommand : CliCommand
 {
     public override string Name => "code";
 
-    public override string Description => "Generate and print a one-time password (like WinAuth) to stdout.";
+    public override string Description => "Generate and print an OTP code to stdout.";
 
     public override async Task<int> ExecuteAsync(string[] args)
     {

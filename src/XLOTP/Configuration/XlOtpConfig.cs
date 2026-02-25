@@ -82,7 +82,7 @@ internal sealed class XlOtpConfig
 
         var profile = new XlOtpProfile
         {
-            Label = string.IsNullOrWhiteSpace(Label) ? "Square Enix" : Label!,
+            Label = string.IsNullOrWhiteSpace(Label) ? "Default OTP Profile" : Label!,
             ProtectedSecret = ProtectedSecret!,
             SecretIsPlainText = SecretIsPlainText,
             ProtectionScope = ProtectionScope,
@@ -105,7 +105,7 @@ internal sealed class XlOtpConfig
 
 internal sealed class XlOtpProfile
 {
-    public string Label { get; set; } = "Square Enix";
+    public string Label { get; set; } = "Default OTP Profile";
 
     public string ProtectedSecret { get; set; } = string.Empty;
 

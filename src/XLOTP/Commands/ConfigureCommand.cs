@@ -20,7 +20,7 @@ internal sealed class ConfigureCommand : CliCommand
             return 0;
         }
 
-        var secretInput = options.Require("secret", "Missing --secret. Provide the base32-encoded Square Enix OTP seed from WinAuth.");
+        var secretInput = options.Require("secret", "Missing --secret. Provide a base32-encoded OTP secret.");
         if (secretInput == null)
         {
             return 1;
@@ -109,12 +109,12 @@ internal sealed class ConfigureCommand : CliCommand
     {
         PrintCommandHeader(executableName, Name, Description);
         Console.WriteLine("Required parameters:");
-        Console.WriteLine("  --secret <value>        Base32 secret (same value WinAuth uses).");
+        Console.WriteLine("  --secret <value>        Base32 OTP secret.");
         Console.WriteLine();
         Console.WriteLine("Optional parameters:");
         Console.WriteLine("  --profile <name>        Profile to create/update (default: default).");
         Console.WriteLine("  --default               Set this profile as default for code/send.");
-        Console.WriteLine("  --label <text>          Friendly name stored in the config (default: Square Enix).");
+        Console.WriteLine("  --label <text>          Friendly profile label (default: profile name).");
         Console.WriteLine("  --digits <number>       Number of OTP digits (default: 6).");
         Console.WriteLine("  --period <seconds>      Code lifetime in seconds (default: 30).");
         Console.WriteLine("  --algo <sha1|sha256|sha512>  HMAC algorithm (default: SHA1).");
