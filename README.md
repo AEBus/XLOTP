@@ -1,8 +1,8 @@
 # XLOTP
 
-[![downloads](https://img.shields.io/github/downloads/AEBus/XLOTP/total?style=flat-square)](https://github.com/AEBus/XLOTP/releases)
-[![release](https://img.shields.io/github/v/release/AEBus/XLOTP?style=flat-square)](https://github.com/AEBus/XLOTP/releases)
-[![license](https://img.shields.io/badge/license-GPL--3.0-blue?style=flat-square)](./LICENSE)
+[![downloads](https://badgen.net/github/assets-dl/AEBus/XLOTP)](https://github.com/AEBus/XLOTP/releases)
+[![release](https://badgen.net/github/release/AEBus/XLOTP)](https://github.com/AEBus/XLOTP/releases)
+[![license](https://badgen.net/github/license/AEBus/XLOTP)](./LICENSE)
 
 XLOTP is a small OTP helper for XIVLauncher.  
 You keep one OTP secret per profile, then launch the right account and auto-send the right OTP with one command (or one shortcut click).
