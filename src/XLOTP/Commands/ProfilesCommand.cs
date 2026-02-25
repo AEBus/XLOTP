@@ -90,6 +90,6 @@ internal sealed class ProfilesCommand : CliCommand
         Console.WriteLine("  --set-default <name>    Set the default profile used by code/send.");
         Console.WriteLine("  --remove <name>         Remove a profile (cannot remove the last profile).");
         Console.WriteLine();
-        Console.WriteLine($"Examples:\n  {executableName} profiles\n  {executableName} profiles --set-default main\n  {executableName} profiles --remove alt");
+        Console.WriteLine($"Examples:\n  {executableName} --profiles\n  {executableName} --profiles --set-default main\n  {executableName} --profiles --remove alt");
     }
 }

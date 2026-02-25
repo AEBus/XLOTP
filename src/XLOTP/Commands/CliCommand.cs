@@ -15,7 +15,7 @@ internal abstract class CliCommand
     protected static void PrintCommandHeader(string executableName, string commandName, string description)
     {
         Console.WriteLine($"{description}\n");
-        Console.WriteLine($"Usage: {executableName} {commandName} [options]\n");
+        Console.WriteLine($"Usage: {executableName} --{commandName} [options]\n");
     }
 
     protected static OptionReader CreateOptions(string[] args) => new(args);

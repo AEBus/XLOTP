@@ -25,14 +25,6 @@ internal static class Program
 
         var options = new OptionReader(args);
 
-        // Legacy command mode support: XLOTP send --profile main
-        if (!args[0].StartsWith("-", StringComparison.Ordinal) &&
-            CommandMap.TryGetValue(args[0], out var legacyCommand))
-        {
-            var commandArgs = args.Skip(1).ToArray();
-            return await legacyCommand.ExecuteAsync(commandArgs);
-        }
-
         // New single-exe mode: XLOTP --send --profile main
         var selectedModes = new List<string>();
         if (options.HasFlag("configure")) selectedModes.Add("configure");
@@ -60,7 +52,7 @@ internal static class Program
         }
 
         var mode = selectedModes[0];
-        var modeArgs = RemoveActionFlag(args, mode);
+        var modeArgs = RemoveActionFlag(args);
         if (!CommandMap.TryGetValue(mode, out var command))
         {
             Console.Error.WriteLine($"Internal error: command '{mode}' is not registered.");
@@ -93,7 +85,7 @@ internal static class Program
         Console.WriteLine($"  {ExecutableName} --profiles");
     }
 
-    private static string[] RemoveActionFlag(string[] args, string mode)
+    private static string[] RemoveActionFlag(string[] args)
     {
         var actionNames = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
         {

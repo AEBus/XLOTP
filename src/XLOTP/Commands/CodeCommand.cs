@@ -62,7 +62,7 @@ internal sealed class CodeCommand : CliCommand
         Console.WriteLine("  --unix-time <seconds>   Provide the UNIX timestamp explicitly.");
         Console.WriteLine("  --counter <value>       Provide a raw HOTP counter instead of time-based generation.");
         Console.WriteLine();
-        Console.WriteLine($"Example:\n  {executableName} code\n  {executableName} code --secret JBSWY3DPEHPK3PXP --time 2025-01-01T00:00:00Z");
+        Console.WriteLine($"Example:\n  {executableName} --code\n  {executableName} --code --secret JBSWY3DPEHPK3PXP --time 2025-01-01T00:00:00Z");
     }
 
 }

@@ -122,6 +122,6 @@ internal sealed class ConfigureCommand : CliCommand
         Console.WriteLine("  --scope <user|machine>  DPAPI scope for encrypted secrets (default: user).");
         Console.WriteLine("  --allow-plaintext       Store the secret as normalized base32 text instead of using DPAPI.");
         Console.WriteLine();
-        Console.WriteLine($"Examples:\n  {executableName} configure --secret JBSWY3DPEHPK3PXP --profile main --default\n  {executableName} configure --secret ... --profile alt --label \"Alt account\" --algo sha1 --period 30");
+        Console.WriteLine($"Examples:\n  {executableName} --configure --secret JBSWY3DPEHPK3PXP --profile main --default\n  {executableName} --configure --secret ... --profile alt --label \"Alt account\" --algo sha1 --period 30");
     }
 }

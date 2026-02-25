@@ -125,7 +125,7 @@ internal sealed class SendCommand : CliCommand
         Console.WriteLine("  --launcher-delay <sec>  Wait time after launching before sending (default 2).");
         Console.WriteLine("  --print                 Echo the OTP to stdout as well.");
         Console.WriteLine();
-        Console.WriteLine($"Example:\n  {executableName} send\n  {executableName} send --launcher \"%LOCALAPPDATA%\\XIVLauncher\\XIVLauncher.exe\"");
+        Console.WriteLine($"Example:\n  {executableName} --send\n  {executableName} --send --launcher \"%LOCALAPPDATA%\\XIVLauncher\\XIVLauncher.exe\"");
     }
 
     private static async Task<bool> TryLaunchXivLauncherAsync(OptionReader options)
