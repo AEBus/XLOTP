@@ -2,11 +2,8 @@ name: Release Build
 
 on:
   push:
-    branches:
-      - main
     tags:
-      - "*"
-  workflow_dispatch:
+      - "v*"
 
 permissions:
   contents: write

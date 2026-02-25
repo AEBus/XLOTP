@@ -1,71 +1,60 @@
 # XLOTP
 
-XLOTP is a small helper app that deals with OTP codes and can auto-send them into XIVLauncher.
+[![downloads](https://img.shields.io/github/downloads/AEBus/XLOTP/total?style=flat-square)](https://github.com/AEBus/XLOTP/releases)
+[![release](https://img.shields.io/github/v/release/AEBus/XLOTP?style=flat-square)](https://github.com/AEBus/XLOTP/releases)
+[![license](https://img.shields.io/badge/license-GPL--3.0-blue?style=flat-square)](./LICENSE)
 
-So instead of opening your phone / password manager every login, you can do one click and let it handle OTP delivery.
+XLOTP is a small OTP helper for XIVLauncher.  
+You keep one OTP secret per profile, then launch the right account and auto-send the right OTP with one command (or one shortcut click).
 
-IMPORTANT FIRST STEP (in XIVLauncher, not in XLOTP):
+IMPORTANT FIRST STEP (inside XIVLauncher):
 - Open `XIVLauncher.exe`
 - Click the gear icon (`Settings`)
-- Enable: `XL Authenticator app/OTP macro support`
+- Enable `XL Authenticator app/OTP macro support`
 
-If this option is off, `XLOTP --send` cannot auto-fill OTP into XIVLauncher.
+If this is not enabled, `XLOTP --send` cannot auto-fill OTP in XIVLauncher.
 
 Runtime requirement:
-- Slim/default build requires installed `.NET 10 Runtime`.
-- Official download page: https://dotnet.microsoft.com/en-us/download/dotnet/10.0
+- The default slim build requires `.NET 10 Runtime`
+- Download: https://dotnet.microsoft.com/en-us/download/dotnet/10.0
 
-## What this thing does
+## What You Get
+- Profile-based OTP storage (`account1`, `account2`, etc.)
+- TOTP and HOTP generation
+- Direct OTP send to XIVLauncher listener (`/ffxivlauncher/<otp>`)
+- Interactive mode (`XLOTP.exe`) and script mode (`XLOTP.exe --send ...`)
+- Safe defaults (loopback-only send unless explicitly overridden)
 
-- Stores OTP secrets in profiles (so one profile per account is easy).
-- Generates TOTP/HOTP codes.
-- Sends OTP directly to XIVLauncher listener (`/ffxivlauncher/<otp>`).
-- Works in interactive mode (menu) or command mode (scripts/shortcuts).
+## Build and Publish
 
-## Quick start
-
-### Build
-
+Build:
 ```powershell
 cd e:\GitHub\XLOTP
 dotnet build
 ```
 
-### Publish (default is slim)
-
+Default publish (slim):
 ```powershell
 dotnet publish src\XLOTP\XLOTP.csproj
 ```
 
 Output:
-
 `src\XLOTP\bin\Release\net10.0\win-x64\publish\`
 
-### Optional: single-file EXE
-
+Optional single-file self-contained EXE:
 ```powershell
 dotnet publish src\XLOTP\XLOTP.csproj -c Release -r win-x64 --self-contained true `
   -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true
 ```
 
-## How to run it
+## How To Run
 
-### Option 1: interactive menu
-
+Interactive menu:
 ```powershell
 XLOTP.exe
 ```
 
-You get a menu where you can:
-1. Configure profile
-2. Show profiles
-3. Set default profile
-4. Generate OTP
-5. Send OTP to XIVLauncher
-6. Exit
-
-### Option 2: command mode
-
+Standard command format:
 ```powershell
 XLOTP.exe --configure [options]
 XLOTP.exe --profiles [options]
@@ -73,16 +62,15 @@ XLOTP.exe --code [options]
 XLOTP.exe --send [options]
 ```
 
-## Real setup example (3 FFXIV accounts)
+## Real Example: 3 FFXIV Accounts
 
-Say your setup is:
+Setup:
 - `account1` = Steam
 - `account2` = Windows / SE client
 - `account3` = Windows / SE client with separate XL config at `%APPDATA%\account3`
-- Launcher path is standard: `%LOCALAPPDATA%\XIVLauncher\XIVLauncher.exe`
+- Launcher path: `%LOCALAPPDATA%\XIVLauncher\XIVLauncher.exe`
 
-One-time secret setup:
-
+One-time OTP profile setup:
 ```powershell
 XLOTP.exe --configure --profile account1 --secret <BASE32_1> --label "account1 (Steam)" --default
 XLOTP.exe --configure --profile account2 --secret <BASE32_2> --label "account2 (Windows)"
@@ -90,7 +78,6 @@ XLOTP.exe --configure --profile account3 --secret <BASE32_3> --label "account3 (
 ```
 
 Daily login commands:
-
 ```powershell
 # account1 (Steam)
 XLOTP.exe --send --profile account1 --launcher "%LOCALAPPDATA%\XIVLauncher\XIVLauncher.exe" --launcher-args "--account account1-True-True"
@@ -102,108 +89,71 @@ XLOTP.exe --send --profile account2 --launcher "%LOCALAPPDATA%\XIVLauncher\XIVLa
 XLOTP.exe --send --profile account3 --launcher "%LOCALAPPDATA%\XIVLauncher\XIVLauncher.exe" --launcher-args "--account account3-True-False --roamingPath ""%APPDATA%\account3"""
 ```
 
-Real flow is basically:
-- click shortcut
-- XLOTP starts
-- it opens XIVLauncher with the right account
-- you press Log in
-- XLOTP sends correct OTP
-- game starts
+Practical flow:
+click shortcut -> XLOTP starts -> it opens XIVLauncher with correct account -> you press Log in -> XLOTP sends correct OTP -> game starts.
 
-No manual OTP copy/paste every login.
+## Windows Shortcut Setup
 
-## Shortcut setup (Windows)
-
-If you want clean one-click launch:
-
-1. Desktop -> Right click -> `New` -> `Shortcut`
+Create one shortcut per account:
+1. Desktop -> `New` -> `Shortcut`
 2. Put full command in `Target`
 3. Set `Start in` to your XLOTP folder
-4. Make one shortcut per account
 
 Example `Start in`:
-
 ```text
 C:\Tools\XLOTP
 ```
 
-Example `Target` for account1:
-
+Example `Target`:
 ```text
 "C:\Tools\XLOTP\XLOTP.exe" --send --profile account1 --launcher "%LOCALAPPDATA%\XIVLauncher\XIVLauncher.exe" --launcher-args "--account account1-True-True"
 ```
 
-Tip: if shortcut quoting is annoying, use small `.cmd` files and point shortcuts to those scripts.
+Tip: if quoting gets messy, use small `.cmd` files and point shortcuts to those.
 
-## Command reference (short + practical)
+## Commands (Quick Reference)
 
 ## `--configure`
-
-Use this to save/update OTP secret in a profile.
+Save or update OTP secret for a profile.
 
 Required:
 - `--secret <base32>`
 
 Common options:
 - `--profile <name>` (default: `default`)
-- `--default` (set default profile)
+- `--default`
 - `--label <text>`
 - `--digits <4..10>`
 - `--period <seconds>`
 - `--algo <sha1|sha256|sha512>`
-- `--scope <user|machine>` (Windows DPAPI)
-- `--allow-plaintext` (non-Windows / explicit insecure storage)
+- `--scope <user|machine>`
+- `--allow-plaintext`
 - `--config <path>`
 
-Example:
-
-```powershell
-XLOTP.exe --configure --profile main --secret JBSWY3DPEHPK3PXP --default
-```
-
 ## `--profiles`
-
-Use this to list/manage profiles.
+List/manage profiles.
 
 Options:
 - `--set-default <name>`
 - `--remove <name>`
 - `--config <path>`
 
-Examples:
-
-```powershell
-XLOTP.exe --profiles
-XLOTP.exe --profiles --set-default main
-XLOTP.exe --profiles --remove alt
-```
-
 ## `--code`
-
-Print OTP code.
+Generate OTP code.
 
 Useful options:
 - `--profile <name>`
 - `--secret <base32>` (one-shot)
 - `--time <ISO8601>` / `--unix-time <seconds>`
-- `--counter <value>` (HOTP mode)
-- plus `--digits`, `--period`, `--algo`, `--config`
-
-Examples:
-
-```powershell
-XLOTP.exe --code --profile main
-XLOTP.exe --code --profile main --time 2026-01-01T00:00:00Z
-XLOTP.exe --code --secret JBSWY3DPEHPK3PXP --counter 1234
-```
+- `--counter <value>` (HOTP)
+- `--digits`, `--period`, `--algo`, `--config`
 
 ## `--send`
-
-Generate (or use) OTP and push it to XIVLauncher.
+Generate (or use) OTP and send it to XIVLauncher.
 
 Useful options:
 - `--profile <name>`
-- `--code <value>` (manual OTP)
+- `--code <value>`
 - `--launcher <path>`
 - `--launcher-args <text>`
 - `--launcher-delay <seconds>`
@@ -211,53 +161,35 @@ Useful options:
 - `--retry-delay <seconds>`
 - `--timeout <seconds>`
 - `--server <url>` / `--path <path>`
-- `--allow-remote-server` (off by default for safety)
+- `--allow-remote-server`
 - `--print` / `--echo`
 
-Example:
+## Config Path
+- Default: `%APPDATA%\XLOTP\config.json`
+- Main fields: `version`, `defaultProfile`, `profiles.<name>.*`
 
-```powershell
-XLOTP.exe --send --profile main --launcher "%LOCALAPPDATA%\XIVLauncher\XIVLauncher.exe"
-```
-
-## Config file
-
-Default path:
-- `%APPDATA%\XLOTP\config.json`
-
-Main fields you’ll see:
-- `version`
-- `defaultProfile`
-- `profiles.<name>.*`
-
-## Security notes (important)
-
-- On Windows, secrets are protected by DPAPI.
-- Default scope is user-level (`--scope user`).
-- Non-Windows encrypted storage is not available in this app; use `--allow-plaintext` only if you accept that risk.
-- `--send` is loopback-only by default (you must explicitly allow remote).
-- Output redacts OTP target URL as `<otp-redacted>`.
+## Security Notes
+- On Windows, persisted secrets are protected with DPAPI
+- Default scope is user-level (`--scope user`)
+- Non-Windows encrypted persistence is unavailable (use `--allow-plaintext` only if you accept that risk)
+- Send target is loopback-only by default
+- Output redacts target URL as `<otp-redacted>`
 
 ## Troubleshooting
 
-"Configuration file was not found"
-- Run `--configure` first or pass `--secret` for one-shot use.
+`Configuration file was not found`
+- Run `--configure` first or use `--secret` one-shot mode
 
-"Profile '<name>' was not found"
-- Run `--profiles` and verify profile name/default profile.
+`Profile '<name>' was not found`
+- Run `--profiles` and check default/profile names
 
-"Refusing to send OTP to non-loopback server"
-- Use local listener, or pass `--allow-remote-server` if you really need remote.
+`Refusing to send OTP to non-loopback server`
+- Use local listener or explicitly pass `--allow-remote-server`
 
-XIVLauncher doesn’t receive OTP
-- Make sure OTP macro support is enabled in XIVLauncher settings.
-- Make sure launcher is actually running.
+XIVLauncher does not receive OTP:
+- Verify XIVLauncher OTP macro support is enabled
+- Verify launcher is running
 - Increase delay/retries:
-
 ```powershell
 XLOTP.exe --send --profile main --launcher "%LOCALAPPDATA%\XIVLauncher\XIVLauncher.exe" --launcher-delay 3 --retries 20
 ```
-
-## License
-
-See repository license file.
