@@ -80,17 +80,17 @@ XLOTP.exe --configure --profile account3 --secret <BASE32_3> --label "account3 (
 Daily login commands:
 ```powershell
 # account1 (Steam)
-XLOTP.exe --send --profile account1 --launcher "%LOCALAPPDATA%\XIVLauncher\XIVLauncher.exe" --launcher-args "--account account1-True-True"
+XLOTP.exe --send --profile account1 --launcher "%LOCALAPPDATA%\XIVLauncher\XIVLauncher.exe" --launcher-args="--account=account1-True-True"
 
 # account2 (Windows)
-XLOTP.exe --send --profile account2 --launcher "%LOCALAPPDATA%\XIVLauncher\XIVLauncher.exe" --launcher-args "--account account2-True-False"
+XLOTP.exe --send --profile account2 --launcher "%LOCALAPPDATA%\XIVLauncher\XIVLauncher.exe" --launcher-args="--account=account2-True-False"
 
 # account3 (Windows + separate roaming path)
-XLOTP.exe --send --profile account3 --launcher "%LOCALAPPDATA%\XIVLauncher\XIVLauncher.exe" --launcher-args "--account account3-True-False --roamingPath ""%APPDATA%\account3"""
+XLOTP.exe --send --profile account3 --launcher "%LOCALAPPDATA%\XIVLauncher\XIVLauncher.exe" --launcher-args="--account=account3-True-False --roamingPath=%APPDATA%\account3"
 ```
 
 Practical flow:
-click shortcut -> XLOTP starts -> it opens XIVLauncher with correct account -> you press Log in -> XLOTP sends correct OTP -> game starts.
+click shortcut -> XLOTP starts -> it opens XIVLauncher with correct account -> you press Log in (OTP dialog opens and listener starts) -> XLOTP sends correct OTP -> game starts.
 
 ## Windows Shortcut Setup
 
@@ -106,7 +106,7 @@ C:\Tools\XLOTP
 
 Example `Target`:
 ```text
-"C:\Tools\XLOTP\XLOTP.exe" --send --profile account1 --launcher "%LOCALAPPDATA%\XIVLauncher\XIVLauncher.exe" --launcher-args "--account account1-True-True"
+"C:\Tools\XLOTP\XLOTP.exe" --send --profile account1 --launcher "%LOCALAPPDATA%\XIVLauncher\XIVLauncher.exe" --launcher-args="--account=account1-True-True"
 ```
 
 Tip: if quoting gets messy, use small `.cmd` files and point shortcuts to those.
@@ -155,7 +155,7 @@ Useful options:
 - `--profile <name>`
 - `--code <value>`
 - `--launcher <path>`
-- `--launcher-args <text>`
+- `--launcher-args=<text>`
 - `--launcher-delay <seconds>`
 - `--retries <n>`
 - `--retry-delay <seconds>`
@@ -189,7 +189,9 @@ Useful options:
 XIVLauncher does not receive OTP:
 - Verify XIVLauncher OTP macro support is enabled
 - Verify launcher is running
+- OTP listener starts when the OTP dialog is open (after pressing `Log in`)
+- Pass launcher args in one token, for example `--launcher-args="--account=... --roamingPath=..."`
 - Increase delay/retries:
 ```powershell
-XLOTP.exe --send --profile main --launcher "%LOCALAPPDATA%\XIVLauncher\XIVLauncher.exe" --launcher-delay 3 --retries 20
+XLOTP.exe --send --profile main --launcher "%LOCALAPPDATA%\XIVLauncher\XIVLauncher.exe" --launcher-args="--account=main-True-False" --launcher-delay 2 --retries 120 --retry-delay 1
 ```
